@@ -32,7 +32,7 @@ export default defineConfig([
       },
     },
   },
-  // Allow default exports for UI components and the Vite config file
+
   {
     files: ["src/components/ui/**/*.{ts,tsx}", "vite.config.ts"],
     rules: {
