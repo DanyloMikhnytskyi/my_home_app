@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
@@ -5,6 +6,15 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+=======
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
+
+function App() {
+  const [count, setCount] = useState(0);
+>>>>>>> d2fd30b (Initial commit with Tailwind setup)
 
   return (
     <>
@@ -17,6 +27,10 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
+<<<<<<< HEAD
+=======
+
+>>>>>>> d2fd30b (Initial commit with Tailwind setup)
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
@@ -29,7 +43,14 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
     </>
+<<<<<<< HEAD
   )
 }
 
 export default App
+=======
+  );
+}
+
+export default App;
+>>>>>>> d2fd30b (Initial commit with Tailwind setup)
