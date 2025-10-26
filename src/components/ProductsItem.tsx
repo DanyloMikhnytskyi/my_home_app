@@ -1,6 +1,11 @@
 import type { Product } from "@/data/productsMock";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/useCart";
+import {
+  TypographyMuted,
+  TypographyP,
+  TypographySmall,
+} from "@/components/ui/typography";
 
 type Props = {
   product: Product;
@@ -33,18 +38,18 @@ export default function ProductItem({ product }: Props) {
         {title}
       </h3>
 
-      <p className="text-sm text-gray-600 mb-3 line-clamp-3">{description}</p>
+      <TypographyP className="line-clamp-3 mb-3 text-gray-600">
+        {description}
+      </TypographyP>
 
       <dl className="flex flex-wrap gap-2 mt-auto">
-        {Object.entries(meta).map(([k, v]) => (
-          <div
-            key={k}
-            className="px-2 py-1 bg-gray-50 border rounded-md text-xs text-gray-700"
-            title={k}
+        {Object.entries(meta).map(([key, value]) => (
+          <TypographySmall
+            key={key}
+            className="px-2 py-1 bg-gray-50 border rounded-md text-gray-700"
           >
-            <dt className="font-medium">{k}</dt>
-            <dd className="text-sm">{v}</dd>
-          </div>
+            <span className="font-medium capitalize">{key}:</span> {value}
+          </TypographySmall>
         ))}
       </dl>
 
@@ -59,9 +64,11 @@ export default function ProductItem({ product }: Props) {
         <Button variant="outline" onClick={() => removeProduct(id)}>
           Remove
         </Button>
-      </div>
 
-      <div className="text-xs text-gray-500 mt-2 text-center">ID: {id}</div>
+        <TypographyMuted className="text-gray-500 mt-2 text-center">
+          ID: {id}
+        </TypographyMuted>
+      </div>
     </article>
   );
 }

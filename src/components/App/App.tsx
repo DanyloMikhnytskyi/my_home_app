@@ -1,4 +1,4 @@
-import ProductsList from "@/components/ui/ productslist";
+import { ProductsList } from "@/components/ProductsList";
 
 export function App() {
   return (
