@@ -1,4 +1,4 @@
-import ProductItem from "@/components/ProductsItem";
+import { ProductItem } from "@/components/ProductsItem";
 import { TypographyH2 } from "@/components/ui/typography";
 import { productsMock } from "@/data/productsMock";
 import type { Product } from "@/data/productsMock";

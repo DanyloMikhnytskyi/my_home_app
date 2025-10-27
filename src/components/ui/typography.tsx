@@ -78,3 +78,31 @@ export function TypographyMuted({
     <p className={cn("text-sm text-muted-foreground", className)} {...props} />
   );
 }
+export function TypographyList({
+  className,
+  children,
+  ...rest
+}: React.HTMLAttributes<HTMLUListElement>) {
+  return (
+    <ul className={cn("flex flex-wrap gap-2", className)} {...rest}>
+      {children}
+    </ul>
+  );
+}
+export function TypographyListItem({
+  className,
+  children,
+  ...rest
+}: React.LiHTMLAttributes<HTMLLIElement>) {
+  return (
+    <li
+      className={cn(
+        "px-2 py-1 bg-gray-50 border rounded-md text-xs text-gray-700",
+        className
+      )}
+      {...rest}
+    >
+      {children}
+    </li>
+  );
+}
