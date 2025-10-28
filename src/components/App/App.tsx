@@ -1,9 +1,15 @@
-import { Button } from "@/components/ui/button";
+import { ProductsList } from "@/components/ProductsList";
 
 export function App() {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center">
-      <Button>Click me</Button>
+    <div className="min-h-screen bg-gray-50">
+      <header className="p-4 bg-white shadow-sm">
+        <div className="max-w-6xl mx-auto">My KBJU App</div>
+      </header>
+
+      <main className="max-w-6xl mx-auto p-4">
+        <ProductsList />
+      </main>
     </div>
   );
 }
