@@ -55,7 +55,7 @@ export function ProductItem({
         Count: {count || 0}
       </TypographyP>
 
-      <div className="flex gap-2 justify-center ">
+      <div className="flex gap-2 justify-center">
         <Button variant="outline" onClick={() => onAddClick?.(id)}>
           Add
         </Button>
