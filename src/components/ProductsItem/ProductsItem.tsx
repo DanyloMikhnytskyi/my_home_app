@@ -1,11 +1,11 @@
 import type { Product } from "@/data/productsMock";
+import { Badge } from "@/components/ui/badge";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import {
   TypographyH3,
   TypographyP,
   TypographyList,
-  TypographyListItem,
 } from "@/components/ui/typography";
 
 interface ProductItemProps extends Product {
@@ -43,14 +43,35 @@ export function ProductItem({
       <TypographyP className="line-clamp-3 mb-3 text-gray-600">
         {description}
       </TypographyP>
-      <TypographyList className=" flex  flex-col mt-auto">
-        {Object.entries(meta).map(([key, value]) => (
-          <TypographyListItem key={key}>
-            <span className="font-medium capitalize">{key}:</span> {value}
-          </TypographyListItem>
-        ))}
+      <TypographyList className="flex flex-col items-center gap-2">
+        <TypographyList className="flex w-full flex-wrap gap-2">
+          {Object.entries(meta)
+            .slice(0, 2)
+            .map(([key, value]) => (
+              <Badge variant="outline" key={key}>
+                {key}: {value}
+              </Badge>
+            ))}
+        </TypographyList>
+        <TypographyList className="flex w-full flex-wrap gap-2">
+          {Object.entries(meta)
+            .slice(2, 4)
+            .map(([key, value]) => (
+              <Badge variant="outline" key={key}>
+                {key}: {value}
+              </Badge>
+            ))}
+        </TypographyList>
+        <TypographyList className="flex w-full flex-wrap gap-2">
+          {Object.entries(meta)
+            .slice(4)
+            .map(([key, value]) => (
+              <Badge variant="outline" key={key}>
+                {key}: {value}
+              </Badge>
+            ))}
+        </TypographyList>
       </TypographyList>
-
       <TypographyP className="mt-auto text-gray-600 text-center mb-2">
         Count: {count || 0}
       </TypographyP>

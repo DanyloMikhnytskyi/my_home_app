@@ -1,5 +1,4 @@
-import { ProductsList } from "@/components/ProductsList";
-
+import { ProductsList } from "@/components/ProductsList/ProductsList";
 export function App() {
   return (
     <div className="min-h-screen bg-gray-50">
