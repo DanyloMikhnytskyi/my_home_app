@@ -6,6 +6,7 @@ type Counts = {
 
 export function useCart() {
   const [counts, setCounts] = useState<Counts>({});
+  console.log(counts);
   const addProduct = (id: number) => {
     setCounts((prev) => ({ ...prev, [id]: prev[id] ? prev[id] + 1 : 1 }));
   };
