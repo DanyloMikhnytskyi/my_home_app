@@ -43,34 +43,12 @@ export function ProductItem({
       <TypographyP className="line-clamp-3 mb-3 text-gray-600">
         {description}
       </TypographyP>
-      <TypographyList className="flex flex-col items-center gap-2">
-        <TypographyList className="flex w-full flex-wrap gap-2">
-          {Object.entries(meta)
-            .slice(0, 2)
-            .map(([key, value]) => (
-              <Badge variant="outline" key={key}>
-                {key}: {value}
-              </Badge>
-            ))}
-        </TypographyList>
-        <TypographyList className="flex w-full flex-wrap gap-2">
-          {Object.entries(meta)
-            .slice(2, 4)
-            .map(([key, value]) => (
-              <Badge variant="outline" key={key}>
-                {key}: {value}
-              </Badge>
-            ))}
-        </TypographyList>
-        <TypographyList className="flex w-full flex-wrap gap-2">
-          {Object.entries(meta)
-            .slice(4)
-            .map(([key, value]) => (
-              <Badge variant="outline" key={key}>
-                {key}: {value}
-              </Badge>
-            ))}
-        </TypographyList>
+      <TypographyList>
+        {Object.entries(meta).map(([key, value]) => (
+          <Badge variant="outline" key={key}>
+            {key}: {value}
+          </Badge>
+        ))}
       </TypographyList>
       <TypographyP className="mt-auto text-gray-600 text-center mb-2">
         Count: {count || 0}

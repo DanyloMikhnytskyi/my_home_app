@@ -3,7 +3,7 @@ import { TypographyH2 } from "@/components/ui/typography";
 import { productsMock } from "@/data/productsMock";
 import type { Product } from "@/data/productsMock";
 import { useCart } from "@/hooks/useCart";
-import Totals from "@/components/Totals/totals";
+import Totals from "@/components/Totals/Totals";
 
 export function ProductsList() {
   const products: Product[] = productsMock;
@@ -11,7 +11,7 @@ export function ProductsList() {
 
   return (
     <section className="p-6">
-      <Totals cart={products} counts={counts} />
+      <Totals products={products} counts={counts} />
       <TypographyH2 className="mb-4">Products</TypographyH2>
 
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
