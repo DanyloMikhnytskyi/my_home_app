@@ -3,7 +3,7 @@ import { TypographyH2 } from "@/components/ui/typography";
 import { productsMock } from "@/data/productsMock";
 import type { Product } from "@/data/productsMock";
 import { useCart } from "@/hooks/useCart";
-import Totals from "@/components/Totals/Totals";
+import Totals from "@/components/Totals";
 
 export function ProductsList() {
   const products: Product[] = productsMock;

@@ -43,13 +43,17 @@ export function ProductItem({
       <TypographyP className="line-clamp-3 mb-3 text-gray-600">
         {description}
       </TypographyP>
-      <TypographyList>
+      <div className="outline-none mb-4 grid grid-cols-3 gap-2 justify-items-center">
         {Object.entries(meta).map(([key, value]) => (
-          <Badge variant="outline" key={key}>
+          <Badge
+            variant="outline"
+            key={key}
+            className="w-full max-w-[8rem] text-center"
+          >
             {key}: {value}
           </Badge>
         ))}
-      </TypographyList>
+      </div>
       <TypographyP className="mt-auto text-gray-600 text-center mb-2">
         Count: {count || 0}
       </TypographyP>
