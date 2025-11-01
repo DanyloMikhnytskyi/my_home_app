@@ -1,11 +1,10 @@
 import type { Product } from "@/data/productsMock";
+import { Badge } from "@/components/ui/badge";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import {
   TypographyH3,
   TypographyP,
-  TypographyList,
-  TypographyListItem,
 } from "@/components/ui/typography";
 
 interface ProductItemProps extends Product {
@@ -43,14 +42,17 @@ export function ProductItem({
       <TypographyP className="line-clamp-3 mb-3 text-gray-600">
         {description}
       </TypographyP>
-      <TypographyList className=" flex  flex-col mt-auto">
+      <div className="outline-none mb-4 grid grid-cols-3 gap-2 justify-items-center">
         {Object.entries(meta).map(([key, value]) => (
-          <TypographyListItem key={key}>
-            <span className="font-medium capitalize">{key}:</span> {value}
-          </TypographyListItem>
+          <Badge
+            variant="outline"
+            key={key}
+            className="w-full max-w-[8rem] text-center"
+          >
+            {key}: {value}
+          </Badge>
         ))}
-      </TypographyList>
-
+      </div>
       <TypographyP className="mt-auto text-gray-600 text-center mb-2">
         Count: {count || 0}
       </TypographyP>

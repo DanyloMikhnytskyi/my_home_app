@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-type Counts = {
+export type Counts = {
   [id: number]: number;
 };
 
