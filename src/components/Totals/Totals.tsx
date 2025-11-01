@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { Product } from "@/data/productsMock";
@@ -9,7 +8,7 @@ type TotalsProps = {
   counts: Counts;
 };
 
-const Totals: FC<TotalsProps> = ({ products, counts }) => {
+export const Totals = ({ products, counts }: TotalsProps) => {
   const totalCalories = products.reduce((acc, { id, meta: { calories } }) => {
     const count = counts[id] || 0;
     return acc + calories * count;
@@ -26,5 +25,3 @@ const Totals: FC<TotalsProps> = ({ products, counts }) => {
     </Card>
   );
 };
-
-export default Totals;

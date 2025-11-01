@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   TypographyH3,
   TypographyP,
-  TypographyList,
 } from "@/components/ui/typography";
 
 interface ProductItemProps extends Product {
