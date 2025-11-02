@@ -1,4 +1,4 @@
-import { ProductsList } from "@/components/ProductsList";
+import { Products } from "@/components/Products";
 
 export function App() {
   return (
@@ -8,7 +8,7 @@ export function App() {
       </header>
 
       <main className="max-w-6xl mx-auto p-4">
-        <ProductsList />
+        <Products />
       </main>
     </div>
   );
