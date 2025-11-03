@@ -1,4 +1,5 @@
 import { Products } from "@/components/Products";
+import { ProductsList } from "../ProductsList";
 
 export function App() {
   return (
