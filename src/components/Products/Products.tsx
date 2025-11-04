@@ -11,6 +11,16 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,6 +28,9 @@ import { Textarea } from "@/components/ui/textarea";
 export function Products() {
   const [products, setProducts] = useState<Product[]>(productsMock);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+  const [isValidationAlertOpen, setIsValidationAlertOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState<Product | null>(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -33,15 +46,18 @@ export function Products() {
     const product = products.find((p) => p.id === productId);
     if (!product) return;
 
-    const confirmed = window.confirm(
-      `Are you sure you want to delete "${product.title}"?`
-    );
+    setProductToDelete(product);
+    setIsDeleteAlertOpen(true);
+  };
 
-    if (confirmed) {
-      setProducts((prevProducts) =>
-        prevProducts.filter((p) => p.id !== productId)
+  const confirmDelete = () => {
+    if (productToDelete) {
+      setProducts((prevProducts: Product[]) =>
+        prevProducts.filter((p: Product) => p.id !== productToDelete.id)
       );
+      setProductToDelete(null);
     }
+    setIsDeleteAlertOpen(false);
   };
 
   const handleInputChange = (
@@ -52,10 +68,27 @@ export function Products() {
   };
 
   const handleAddProduct = () => {
-    // Validate required fields
-    if (!formData.title || !formData.description || !formData.calories) {
-      alert("Please fill in at least title, description, and calories");
+    if (!formData.title || !formData.description || formData.calories === "") {
+      setIsValidationAlertOpen(true);
       return;
+    }
+
+    const caloriesNum = Number(formData.calories);
+    if (!Number.isFinite(caloriesNum) || caloriesNum <= 0) {
+      setIsValidationAlertOpen(true);
+      return;
+    }
+
+    const optionalNumericFields = ["carbs", "protein", "fat", "fiber"] as const;
+    for (const key of optionalNumericFields) {
+      const val = formData[key];
+      if (val !== "") {
+        const num = Number(val);
+        if (!Number.isFinite(num) || num <= 0) {
+          setIsValidationAlertOpen(true);
+          return;
+        }
+      }
     }
 
     const newProduct: Product = {
@@ -66,7 +99,7 @@ export function Products() {
         formData.image ||
         "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800",
       meta: {
-        calories: Number(formData.calories),
+        calories: caloriesNum,
         carbs: formData.carbs ? Number(formData.carbs) : undefined,
         protein: formData.protein ? Number(formData.protein) : undefined,
         fat: formData.fat ? Number(formData.fat) : undefined,
@@ -74,9 +107,8 @@ export function Products() {
       },
     };
 
-    setProducts((prev) => [...prev, newProduct]);
+    setProducts((prev: Product[]) => [...prev, newProduct]);
     setIsDialogOpen(false);
-    // Reset form
     setFormData({
       title: "",
       description: "",
@@ -216,6 +248,43 @@ export function Products() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={isDeleteAlertOpen} onOpenChange={setIsDeleteAlertOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete "{productToDelete?.title}"? This
+              action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={isValidationAlertOpen}
+        onOpenChange={setIsValidationAlertOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Missing / Invalid Fields</AlertDialogTitle>
+            <AlertDialogDescription>
+              Please fill in title, description and provide a valid calories
+              number (&gt; 0). If you entered carbs, protein, fat or fiber, they
+              must also be numbers greater than 0.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction>OK</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

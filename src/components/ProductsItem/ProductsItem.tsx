@@ -35,7 +35,7 @@ export function ProductItem({
           <Trash2 className="h-4 w-4" />
         </Button>
       )}
-      
+
       <AspectRatio
         ratio={16 / 9}
         className="mb-4 bg-gray-200 rounded-lg overflow-hidden"
