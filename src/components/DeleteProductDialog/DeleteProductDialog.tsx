@@ -10,33 +10,31 @@ import {
 } from "@/components/ui/alert-dialog";
 
 interface DeleteProductDialogProps {
-  isDeleteAlertOpen: boolean;
-  setIsDeleteAlertOpen: (open: boolean) => void;
-  productToDelete: { title: string } | null;
-  confirmDelete: () => void;
+  isOpen: boolean;
+  onCancel: () => void;
+  onConfirm: () => void;
+  productToDeleteTitle?: string;
 }
 
 export const DeleteProductDialog = ({
-  isDeleteAlertOpen,
-  setIsDeleteAlertOpen,
-  productToDelete,
-  confirmDelete,
-}: DeleteProductDialogProps) => {
-  return (
-    <AlertDialog open={isDeleteAlertOpen} onOpenChange={setIsDeleteAlertOpen}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            Are you sure you want to delete "{productToDelete?.title}"? This
-            action cannot be undone.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={confirmDelete}>Delete</AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  );
-};
+  isOpen,
+  onCancel,
+  onConfirm,
+  productToDeleteTitle,
+}: DeleteProductDialogProps) => (
+  <AlertDialog open={isOpen} onOpenChange={onCancel}>
+    <AlertDialogContent>
+      <AlertDialogHeader>
+        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+        <AlertDialogDescription>
+          Are you sure you want to delete "{productToDeleteTitle}"? This action
+          cannot be undone.
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
+        <AlertDialogCancel onClick={onCancel}>Cancel</AlertDialogCancel>
+        <AlertDialogAction onClick={onConfirm}>Delete</AlertDialogAction>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialog>
+);

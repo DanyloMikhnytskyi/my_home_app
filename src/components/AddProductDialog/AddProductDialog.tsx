@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,35 +10,92 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-
-interface FormData {
-  title: string;
-  description: string;
-  image: string;
-  calories: string;
-  carbs: string;
-  protein: string;
-  fat: string;
-  fiber: string;
-}
+import type { Product } from "@/data/productsMock";
 
 interface AddProductDialogProps {
   isDialogOpen: boolean;
   setIsDialogOpen: (open: boolean) => void;
-  formData: FormData;
-  handleInputChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
-  handleAddProduct: () => void;
+  onAddProduct: (product: Product) => void;
 }
 
 export const AddProductDialog = ({
   isDialogOpen,
   setIsDialogOpen,
-  formData,
-  handleInputChange,
-  handleAddProduct,
+  onAddProduct,
 }: AddProductDialogProps) => {
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    image: "",
+    calories: "",
+    carbs: "",
+    protein: "",
+    fat: "",
+    fiber: "",
+  });
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddProduct = () => {
+    if (!formData.title || !formData.description || formData.calories === "") {
+      return;
+    }
+
+    const caloriesNum = Number(formData.calories);
+
+    if (!Number.isFinite(caloriesNum) || caloriesNum <= 0) {
+      return;
+    }
+
+    const optionalNumericFields = ["carbs", "protein", "fat", "fiber"] as const;
+
+    for (const key of optionalNumericFields) {
+      const val = formData[key];
+
+      if (val !== "") {
+        const num = Number(val);
+
+        if (!Number.isFinite(num) || num <= 0) {
+          return;
+        }
+      }
+    }
+
+    const newProduct: Product = {
+      id: new Date().getTime(),
+      title: formData.title,
+      description: formData.description,
+      image:
+        formData.image ||
+        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800",
+      meta: {
+        calories: caloriesNum,
+        carbs: formData.carbs ? Number(formData.carbs) : undefined,
+        protein: formData.protein ? Number(formData.protein) : undefined,
+        fat: formData.fat ? Number(formData.fat) : undefined,
+        fiber: formData.fiber ? Number(formData.fiber) : undefined,
+      },
+    };
+
+    onAddProduct(newProduct);
+    setIsDialogOpen(false);
+    setFormData({
+      title: "",
+      description: "",
+      image: "",
+      calories: "",
+      carbs: "",
+      protein: "",
+      fat: "",
+      fiber: "",
+    });
+  };
+
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogContent>
