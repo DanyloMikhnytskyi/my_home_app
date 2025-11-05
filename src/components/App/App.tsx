@@ -1,15 +1,28 @@
+import { useState } from "react";
+import { Products } from "@/components/Products";
 import { ProductsList } from "@/components/ProductsList";
+import { Sidebar } from "@/components/Sidebar";
+
+type View = "products" | "calculator";
 
 export function App() {
+  const [view, setView] = useState<View>("products");
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="p-4 bg-white shadow-sm">
-        <div className="max-w-6xl mx-auto">My KBJU App</div>
-      </header>
+      <div className="max-w-7xl mx-auto">
+        <div className="flex">
+          <aside className="w-0 md:w-64">
+            <Sidebar currentView={view} onChangeView={(v) => setView(v)} />
+          </aside>
 
-      <main className="max-w-6xl mx-auto p-4">
-        <ProductsList />
-      </main>
+          <main className="flex-1 p-6">
+            {view === "products" && <Products />}
+
+            {view === "calculator" && <ProductsList />}
+          </main>
+        </div>
+      </div>
     </div>
   );
 }
