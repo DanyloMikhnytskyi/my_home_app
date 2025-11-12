@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-import { useForm, type Resolver } from "react-hook-form";
-import { z } from "zod";
+import { useForm, type Resolver, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,49 +13,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { Product } from "@/data/productsMock";
+import { TypographyP } from "../ui/typography";
 
-const schema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().min(1, "Description is required"),
-  image: z
-    .string()
-    .optional()
-    .transform((v) => (v === undefined ? "" : v))
-    .refine((val) => val === "" || /^https?:\/\//.test(val), {
-      message: "Image must be a valid URL or empty",
-    }),
+import {
+  productFormSchema,
+  type ProductFormValues,
+} from "@/components/AppProductFrom/AppProductFrom.schema";
 
-  calories: z.preprocess((val) => {
-    if (typeof val === "string") return val.trim();
-    return val;
-  }, z.coerce.number().positive({ message: "Calories must be a positive number" })),
-
-  carbs: z.preprocess((val) => {
-    if (val === "" || val === undefined) return undefined;
-    if (typeof val === "string") return val.trim();
-    return val;
-  }, z.coerce.number().positive().optional()),
-
-  protein: z.preprocess((val) => {
-    if (val === "" || val === undefined) return undefined;
-    if (typeof val === "string") return val.trim();
-    return val;
-  }, z.coerce.number().positive().optional()),
-
-  fat: z.preprocess((val) => {
-    if (val === "" || val === undefined) return undefined;
-    if (typeof val === "string") return val.trim();
-    return val;
-  }, z.coerce.number().positive().optional()),
-
-  fiber: z.preprocess((val) => {
-    if (val === "" || val === undefined) return undefined;
-    if (typeof val === "string") return val.trim();
-    return val;
-  }, z.coerce.number().positive().optional()),
-});
-
-type FormValues = z.infer<typeof schema>;
+import AppProductFrom from "@/components/AppProductFrom/AppProductFrom";
 
 interface AddProductDialogProps {
   isDialogOpen: boolean;
@@ -69,34 +33,35 @@ export const AddProductDialog = ({
   setIsDialogOpen,
   onAddProduct,
 }: AddProductDialogProps) => {
-  const resolver = zodResolver(schema) as Resolver<FormValues, any>;
+  const resolver = zodResolver(productFormSchema) as Resolver<
+    ProductFormValues,
+    any
+  >;
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting, isDirty },
-  } = useForm<FormValues>({
+  } = useForm<ProductFormValues>({
     resolver,
     defaultValues: {
       title: "",
       description: "",
       image: "",
       calories: 0,
-      carbs: 0,
-      protein: 0,
-      fat: 0,
-      fiber: 0,
+      carbs: undefined,
+      protein: undefined,
+      fat: undefined,
+      fiber: undefined,
     },
   });
 
   useEffect(() => {
-    if (!isDialogOpen) {
-      reset();
-    }
+    if (!isDialogOpen) reset();
   }, [isDialogOpen, reset]);
 
-  const onSubmit = (values: FormValues) => {
+  const onSubmit: SubmitHandler<ProductFormValues> = (values) => {
     const newProduct: Product = {
       id: new Date().getTime(),
       title: values.title,
@@ -125,7 +90,8 @@ export const AddProductDialog = ({
           <DialogTitle>Add New Product</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {/* Використовуємо wrapper-компонент, який лише рендерить <form> */}
+        <AppProductFrom onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <Label htmlFor="title">Title *</Label>
             <Input
@@ -134,9 +100,9 @@ export const AddProductDialog = ({
               placeholder="Product name"
             />
             {errors.title && (
-              <p className="text-sm text-red-600 mt-1">
+              <TypographyP className="text-sm text-red-600 mt-1">
                 {errors.title.message}
-              </p>
+              </TypographyP>
             )}
           </div>
 
@@ -148,9 +114,9 @@ export const AddProductDialog = ({
               placeholder="Product description"
             />
             {errors.description && (
-              <p className="text-sm text-red-600 mt-1">
+              <TypographyP className="text-sm text-red-600 mt-1">
                 {errors.description.message}
-              </p>
+              </TypographyP>
             )}
           </div>
 
@@ -162,9 +128,9 @@ export const AddProductDialog = ({
               placeholder="https://example.com/image.jpg"
             />
             {errors.image && (
-              <p className="text-sm text-red-600 mt-1">
+              <TypographyP className="text-sm text-red-600 mt-1">
                 {errors.image.message}
-              </p>
+              </TypographyP>
             )}
           </div>
 
@@ -178,9 +144,9 @@ export const AddProductDialog = ({
                 placeholder="160"
               />
               {errors.calories && (
-                <p className="text-sm text-red-600 mt-1">
+                <TypographyP className="text-sm text-red-600 mt-1">
                   {errors.calories.message}
-                </p>
+                </TypographyP>
               )}
             </div>
 
@@ -193,9 +159,9 @@ export const AddProductDialog = ({
                 placeholder="9"
               />
               {errors.carbs && (
-                <p className="text-sm text-red-600 mt-1">
+                <TypographyP className="text-sm text-red-600 mt-1">
                   {errors.carbs.message}
-                </p>
+                </TypographyP>
               )}
             </div>
 
@@ -208,9 +174,9 @@ export const AddProductDialog = ({
                 placeholder="2"
               />
               {errors.protein && (
-                <p className="text-sm text-red-600 mt-1">
+                <TypographyP className="text-sm text-red-600 mt-1">
                   {errors.protein.message}
-                </p>
+                </TypographyP>
               )}
             </div>
 
@@ -223,9 +189,9 @@ export const AddProductDialog = ({
                 placeholder="15"
               />
               {errors.fat && (
-                <p className="text-sm text-red-600 mt-1">
+                <TypographyP className="text-sm text-red-600 mt-1">
                   {errors.fat.message}
-                </p>
+                </TypographyP>
               )}
             </div>
 
@@ -238,9 +204,9 @@ export const AddProductDialog = ({
                 placeholder="7"
               />
               {errors.fiber && (
-                <p className="text-sm text-red-600 mt-1">
+                <TypographyP className="text-sm text-red-600 mt-1">
                   {errors.fiber.message}
-                </p>
+                </TypographyP>
               )}
             </div>
           </div>
@@ -257,8 +223,10 @@ export const AddProductDialog = ({
               Add Product
             </Button>
           </DialogFooter>
-        </form>
+        </AppProductFrom>
       </DialogContent>
     </Dialog>
   );
 };
+
+export default AddProductDialog;
