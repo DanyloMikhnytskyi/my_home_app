@@ -15,5 +15,3 @@ export const AppProductFrom = React.forwardRef<
     </form>
   );
 });
-
-export default AppProductFrom;

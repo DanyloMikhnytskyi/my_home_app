@@ -20,7 +20,7 @@ import {
   type ProductFormValues,
 } from "@/components/AppProductFrom/AppProductFrom.schema";
 
-import AppProductFrom from "@/components/AppProductFrom/AppProductFrom";
+import { AppProductFrom } from "@/components/AppProductFrom";
 
 interface AddProductDialogProps {
   isDialogOpen: boolean;
@@ -90,7 +90,6 @@ export const AddProductDialog = ({
           <DialogTitle>Add New Product</DialogTitle>
         </DialogHeader>
 
-        {/* Використовуємо wrapper-компонент, який лише рендерить <form> */}
         <AppProductFrom onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <Label htmlFor="title">Title *</Label>
