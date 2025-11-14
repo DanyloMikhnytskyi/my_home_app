@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { useForm, type Resolver, type SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,6 +13,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { Product } from "@/data/productsMock";
+import { TypographyP } from "../ui/typography";
+
+import {
+  productFormSchema,
+  type ProductFormValues,
+} from "@/components/AppProductFrom/AppProductFrom.schema";
+
+import { AppProductFrom } from "@/components/AppProductFrom";
 
 interface AddProductDialogProps {
   isDialogOpen: boolean;
@@ -23,77 +33,54 @@ export const AddProductDialog = ({
   setIsDialogOpen,
   onAddProduct,
 }: AddProductDialogProps) => {
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    image: "",
-    calories: "",
-    carbs: "",
-    protein: "",
-    fat: "",
-    fiber: "",
+  const resolver = zodResolver(productFormSchema) as Resolver<
+    ProductFormValues,
+    any
+  >;
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting, isDirty },
+  } = useForm<ProductFormValues>({
+    resolver,
+    defaultValues: {
+      title: "",
+      description: "",
+      image: "",
+      calories: 0,
+      carbs: undefined,
+      protein: undefined,
+      fat: undefined,
+      fiber: undefined,
+    },
   });
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  useEffect(() => {
+    if (!isDialogOpen) reset();
+  }, [isDialogOpen, reset]);
 
-  const handleAddProduct = () => {
-    if (!formData.title || !formData.description || formData.calories === "") {
-      return;
-    }
-
-    const caloriesNum = Number(formData.calories);
-
-    if (!Number.isFinite(caloriesNum) || caloriesNum <= 0) {
-      return;
-    }
-
-    const optionalNumericFields = ["carbs", "protein", "fat", "fiber"] as const;
-
-    for (const key of optionalNumericFields) {
-      const val = formData[key];
-
-      if (val !== "") {
-        const num = Number(val);
-
-        if (!Number.isFinite(num) || num <= 0) {
-          return;
-        }
-      }
-    }
-
+  const onSubmit: SubmitHandler<ProductFormValues> = (values) => {
     const newProduct: Product = {
       id: new Date().getTime(),
-      title: formData.title,
-      description: formData.description,
+      title: values.title,
+      description: values.description,
       image:
-        formData.image ||
+        values.image ||
         "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800",
       meta: {
-        calories: caloriesNum,
-        carbs: formData.carbs ? Number(formData.carbs) : undefined,
-        protein: formData.protein ? Number(formData.protein) : undefined,
-        fat: formData.fat ? Number(formData.fat) : undefined,
-        fiber: formData.fiber ? Number(formData.fiber) : undefined,
+        calories: values.calories,
+        carbs: values.carbs,
+        protein: values.protein,
+        fat: values.fat,
+        fiber: values.fiber,
       },
     };
 
     onAddProduct(newProduct);
     setIsDialogOpen(false);
-    setFormData({
-      title: "",
-      description: "",
-      image: "",
-      calories: "",
-      carbs: "",
-      protein: "",
-      fat: "",
-      fiber: "",
-    });
+    reset();
   };
 
   return (
@@ -103,38 +90,47 @@ export const AddProductDialog = ({
           <DialogTitle>Add New Product</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <AppProductFrom onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <Label htmlFor="title">Title *</Label>
             <Input
               id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
+              {...register("title")}
               placeholder="Product name"
             />
+            {errors.title && (
+              <TypographyP className="text-sm text-red-600 mt-1">
+                {errors.title.message}
+              </TypographyP>
+            )}
           </div>
 
           <div>
             <Label htmlFor="description">Description *</Label>
             <Textarea
               id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
+              {...register("description")}
               placeholder="Product description"
             />
+            {errors.description && (
+              <TypographyP className="text-sm text-red-600 mt-1">
+                {errors.description.message}
+              </TypographyP>
+            )}
           </div>
 
           <div>
             <Label htmlFor="image">Image URL</Label>
             <Input
               id="image"
-              name="image"
-              value={formData.image}
-              onChange={handleInputChange}
+              {...register("image")}
               placeholder="https://example.com/image.jpg"
             />
+            {errors.image && (
+              <TypographyP className="text-sm text-red-600 mt-1">
+                {errors.image.message}
+              </TypographyP>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -142,71 +138,94 @@ export const AddProductDialog = ({
               <Label htmlFor="calories">Calories *</Label>
               <Input
                 id="calories"
-                name="calories"
+                {...register("calories", { valueAsNumber: true })}
                 type="number"
-                value={formData.calories}
-                onChange={handleInputChange}
                 placeholder="160"
               />
+              {errors.calories && (
+                <TypographyP className="text-sm text-red-600 mt-1">
+                  {errors.calories.message}
+                </TypographyP>
+              )}
             </div>
 
             <div>
               <Label htmlFor="carbs">Carbs (g)</Label>
               <Input
                 id="carbs"
-                name="carbs"
+                {...register("carbs")}
                 type="number"
-                value={formData.carbs}
-                onChange={handleInputChange}
                 placeholder="9"
               />
+              {errors.carbs && (
+                <TypographyP className="text-sm text-red-600 mt-1">
+                  {errors.carbs.message}
+                </TypographyP>
+              )}
             </div>
 
             <div>
               <Label htmlFor="protein">Protein (g)</Label>
               <Input
                 id="protein"
-                name="protein"
+                {...register("protein")}
                 type="number"
-                value={formData.protein}
-                onChange={handleInputChange}
                 placeholder="2"
               />
+              {errors.protein && (
+                <TypographyP className="text-sm text-red-600 mt-1">
+                  {errors.protein.message}
+                </TypographyP>
+              )}
             </div>
 
             <div>
               <Label htmlFor="fat">Fat (g)</Label>
               <Input
                 id="fat"
-                name="fat"
+                {...register("fat")}
                 type="number"
-                value={formData.fat}
-                onChange={handleInputChange}
                 placeholder="15"
               />
+              {errors.fat && (
+                <TypographyP className="text-sm text-red-600 mt-1">
+                  {errors.fat.message}
+                </TypographyP>
+              )}
             </div>
 
             <div>
               <Label htmlFor="fiber">Fiber (g)</Label>
               <Input
                 id="fiber"
-                name="fiber"
+                {...register("fiber")}
                 type="number"
-                value={formData.fiber}
-                onChange={handleInputChange}
                 placeholder="7"
               />
+              {errors.fiber && (
+                <TypographyP className="text-sm text-red-600 mt-1">
+                  {errors.fiber.message}
+                </TypographyP>
+              )}
             </div>
           </div>
-        </div>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-            Cancel
-          </Button>
-          <Button onClick={handleAddProduct}>Add Product</Button>
-        </DialogFooter>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => setIsDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isSubmitting || !isDirty}>
+              Add Product
+            </Button>
+          </DialogFooter>
+        </AppProductFrom>
       </DialogContent>
     </Dialog>
   );
 };
+
+export default AddProductDialog;
