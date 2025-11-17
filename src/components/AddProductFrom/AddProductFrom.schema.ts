@@ -19,28 +19,28 @@ export const productFormSchema = z.object({
     (val) => trimIfString(val),
     z.coerce
       .number()
-      .positive({ message: "Calories must be a positive number" })
+      .nonnegative({ message: "Calories must be zero or a positive number" })
   ),
 
   carbs: z.preprocess((val) => {
     if (val === "" || val === undefined) return undefined;
     return trimIfString(val);
-  }, z.coerce.number().positive().optional()),
+  }, z.coerce.number().nonnegative().optional()),
 
   protein: z.preprocess((val) => {
     if (val === "" || val === undefined) return undefined;
     return trimIfString(val);
-  }, z.coerce.number().positive().optional()),
+  }, z.coerce.number().nonnegative().optional()),
 
   fat: z.preprocess((val) => {
     if (val === "" || val === undefined) return undefined;
     return trimIfString(val);
-  }, z.coerce.number().positive().optional()),
+  }, z.coerce.number().nonnegative().optional()),
 
   fiber: z.preprocess((val) => {
     if (val === "" || val === undefined) return undefined;
     return trimIfString(val);
-  }, z.coerce.number().positive().optional()),
+  }, z.coerce.number().nonnegative().optional()),
 });
 
 export type ProductFormValues = z.infer<typeof productFormSchema>;

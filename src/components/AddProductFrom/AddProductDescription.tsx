@@ -2,16 +2,13 @@ import { useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { TypographyP } from "@/components/ui/typography";
+import { type ProductFormValues } from "@/components/AddProductFrom/AddProductFrom.schema";
 
 export function AddProductDescription() {
-  let register: any = undefined;
-  let errors: any = undefined;
-
-  try {
-    const ctx = useFormContext();
-    register = ctx?.register;
-    errors = ctx?.formState?.errors;
-  } catch (errors) {}
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<ProductFormValues>();
 
   return (
     <div>

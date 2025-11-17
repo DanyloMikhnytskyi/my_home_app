@@ -16,12 +16,13 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
-import { AppProductFrom } from "@/components/AddProductFrom";
-import { AddProductTitle } from "../AddProductTitle";
-import { AddProductDescription } from "../AddProductDescription";
-import { AddProductImage } from "../AddProductImage";
-import { AddProductNumber } from "../AddProductNumber";
-
+import {
+  AppProductFrom,
+  AddProductTitle,
+  AddProductDescription,
+  AddProductImage,
+  AddProductNumber,
+} from "@/components/AddProductFrom";
 interface AddProductDialogProps {
   isDialogOpen: boolean;
   setIsDialogOpen: (open: boolean) => void;
@@ -33,10 +34,9 @@ export const AddProductDialog = ({
   setIsDialogOpen,
   onAddProduct,
 }: AddProductDialogProps) => {
-  const resolver = zodResolver(productFormSchema) as Resolver<
-    ProductFormValues,
-    any
-  >;
+  const resolver = zodResolver(
+    productFormSchema
+  ) as Resolver<ProductFormValues>;
 
   const {
     reset,
@@ -48,10 +48,10 @@ export const AddProductDialog = ({
       description: "",
       image: "",
       calories: 0,
-      carbs: undefined,
-      protein: undefined,
-      fat: undefined,
-      fiber: undefined,
+      carbs: 0,
+      protein: 0,
+      fat: 0,
+      fiber: 0,
     },
   });
 
@@ -88,25 +88,28 @@ export const AddProductDialog = ({
           <DialogTitle>Add New Product</DialogTitle>
         </DialogHeader>
 
-        <AppProductFrom onSubmit={onSubmit}>
+        <AppProductFrom key={String(isDialogOpen)} onSubmit={onSubmit}>
           <AddProductTitle />
           <AddProductDescription />
           <AddProductImage />
 
           <div className="grid grid-cols-2 gap-4">
-            <AddProductNumber
-              name="calories"
-              label="Calories *"
-              placeholder="160"
-            />
-            <AddProductNumber name="carbs" label="Carbs (g)" placeholder="9" />
-            <AddProductNumber
-              name="protein"
-              label="Protein (g)"
-              placeholder="2"
-            />
-            <AddProductNumber name="fat" label="Fat (g)" placeholder="15" />
-            <AddProductNumber name="fiber" label="Fiber (g)" placeholder="7" />
+            {(
+              [
+                { name: "calories", label: "Calories *", placeholder: "160" },
+                { name: "carbs", label: "Carbs (g)", placeholder: "9" },
+                { name: "protein", label: "Protein (g)", placeholder: "2" },
+                { name: "fat", label: "Fat (g)", placeholder: "15" },
+                { name: "fiber", label: "Fiber (g)", placeholder: "7" },
+              ] as const
+            ).map((f) => (
+              <AddProductNumber
+                key={f.name}
+                name={f.name}
+                label={f.label}
+                placeholder={f.placeholder}
+              />
+            ))}
           </div>
 
           <DialogFooter>

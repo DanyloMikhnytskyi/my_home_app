@@ -2,15 +2,15 @@ import { useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { TypographyP } from "@/components/ui/typography";
+import type { ProductFormValues } from "./AddProductFrom.schema";
 
 type AddProductNumberProps = {
-  name: string;
+  name: "calories" | "carbs" | "protein" | "fat" | "fiber";
   label?: string;
   id?: string;
   placeholder?: string;
   type?: string;
 };
-
 export function AddProductNumber({
   name,
   label,
@@ -21,9 +21,9 @@ export function AddProductNumber({
   const {
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<ProductFormValues>();
 
-  const error = errors[name]?.message as string | undefined;
+  const error = errors[name]?.message;
 
   return (
     <div>
@@ -33,7 +33,7 @@ export function AddProductNumber({
         id={id || name}
         type={type}
         placeholder={placeholder}
-        {...register(name, { valueAsNumber: type === "number" })}
+        {...register(name)}
       />
 
       {error && (

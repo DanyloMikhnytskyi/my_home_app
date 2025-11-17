@@ -21,10 +21,10 @@ export const AppProductFrom = ({
       description: "",
       image: "",
       calories: 0,
-      carbs: undefined,
-      protein: undefined,
-      fat: undefined,
-      fiber: undefined,
+      carbs: 0,
+      protein: 0,
+      fat: 0,
+      fiber: 0,
     } satisfies ProductFormValues,
   });
 
