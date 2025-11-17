@@ -1,6 +1,12 @@
 import { useEffect } from "react";
 import { useForm, type Resolver, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  productFormSchema,
+  type ProductFormValues,
+} from "@/components/AddProductFrom/AddProductFrom.schema";
+import type { Product } from "@/data/productsMock";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,18 +15,12 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import type { Product } from "@/data/productsMock";
-import { TypographyP } from "../ui/typography";
 
-import {
-  productFormSchema,
-  type ProductFormValues,
-} from "@/components/AppProductFrom/AppProductFrom.schema";
-
-import { AppProductFrom } from "@/components/AppProductFrom";
+import { AppProductFrom } from "@/components/AddProductFrom";
+import { AddProductTitle } from "../AddProductTitle";
+import { AddProductDescription } from "../AddProductDescription";
+import { AddProductImage } from "../AddProductImage";
+import { AddProductNumber } from "../AddProductNumber";
 
 interface AddProductDialogProps {
   isDialogOpen: boolean;
@@ -39,10 +39,8 @@ export const AddProductDialog = ({
   >;
 
   const {
-    register,
-    handleSubmit,
     reset,
-    formState: { errors, isSubmitting, isDirty },
+    formState: { isSubmitting, isDirty },
   } = useForm<ProductFormValues>({
     resolver,
     defaultValues: {
@@ -90,124 +88,25 @@ export const AddProductDialog = ({
           <DialogTitle>Add New Product</DialogTitle>
         </DialogHeader>
 
-        <AppProductFrom onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <Label htmlFor="title">Title *</Label>
-            <Input
-              id="title"
-              {...register("title")}
-              placeholder="Product name"
-            />
-            {errors.title && (
-              <TypographyP className="text-sm text-red-600 mt-1">
-                {errors.title.message}
-              </TypographyP>
-            )}
-          </div>
-
-          <div>
-            <Label htmlFor="description">Description *</Label>
-            <Textarea
-              id="description"
-              {...register("description")}
-              placeholder="Product description"
-            />
-            {errors.description && (
-              <TypographyP className="text-sm text-red-600 mt-1">
-                {errors.description.message}
-              </TypographyP>
-            )}
-          </div>
-
-          <div>
-            <Label htmlFor="image">Image URL</Label>
-            <Input
-              id="image"
-              {...register("image")}
-              placeholder="https://example.com/image.jpg"
-            />
-            {errors.image && (
-              <TypographyP className="text-sm text-red-600 mt-1">
-                {errors.image.message}
-              </TypographyP>
-            )}
-          </div>
+        <AppProductFrom onSubmit={onSubmit}>
+          <AddProductTitle />
+          <AddProductDescription />
+          <AddProductImage />
 
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="calories">Calories *</Label>
-              <Input
-                id="calories"
-                {...register("calories", { valueAsNumber: true })}
-                type="number"
-                placeholder="160"
-              />
-              {errors.calories && (
-                <TypographyP className="text-sm text-red-600 mt-1">
-                  {errors.calories.message}
-                </TypographyP>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="carbs">Carbs (g)</Label>
-              <Input
-                id="carbs"
-                {...register("carbs")}
-                type="number"
-                placeholder="9"
-              />
-              {errors.carbs && (
-                <TypographyP className="text-sm text-red-600 mt-1">
-                  {errors.carbs.message}
-                </TypographyP>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="protein">Protein (g)</Label>
-              <Input
-                id="protein"
-                {...register("protein")}
-                type="number"
-                placeholder="2"
-              />
-              {errors.protein && (
-                <TypographyP className="text-sm text-red-600 mt-1">
-                  {errors.protein.message}
-                </TypographyP>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="fat">Fat (g)</Label>
-              <Input
-                id="fat"
-                {...register("fat")}
-                type="number"
-                placeholder="15"
-              />
-              {errors.fat && (
-                <TypographyP className="text-sm text-red-600 mt-1">
-                  {errors.fat.message}
-                </TypographyP>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="fiber">Fiber (g)</Label>
-              <Input
-                id="fiber"
-                {...register("fiber")}
-                type="number"
-                placeholder="7"
-              />
-              {errors.fiber && (
-                <TypographyP className="text-sm text-red-600 mt-1">
-                  {errors.fiber.message}
-                </TypographyP>
-              )}
-            </div>
+            <AddProductNumber
+              name="calories"
+              label="Calories *"
+              placeholder="160"
+            />
+            <AddProductNumber name="carbs" label="Carbs (g)" placeholder="9" />
+            <AddProductNumber
+              name="protein"
+              label="Protein (g)"
+              placeholder="2"
+            />
+            <AddProductNumber name="fat" label="Fat (g)" placeholder="15" />
+            <AddProductNumber name="fiber" label="Fiber (g)" placeholder="7" />
           </div>
 
           <DialogFooter>
@@ -218,7 +117,7 @@ export const AddProductDialog = ({
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting || !isDirty}>
+            <Button type="submit" disabled={isSubmitting || isDirty}>
               Add Product
             </Button>
           </DialogFooter>
