@@ -227,5 +227,3 @@ export const AddProductDialog = ({
     </Dialog>
   );
 };
-
-export default AddProductDialog;
