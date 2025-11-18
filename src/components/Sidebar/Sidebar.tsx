@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 type View = "products" | "calculator";
 
@@ -57,20 +57,6 @@ export function Sidebar({
               onTouchStart={handleHeaderClick}
               className="flex items-center gap-3 p-1 rounded focus:outline-none"
             >
-              <svg
-                className="w-6 h-6 text-gray-700"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="9"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                />
-              </svg>
               <div className="text-left">
                 <h3 className="text-lg font-semibold">Kbju app</h3>
                 <p className="text-xs text-gray-500">products · calculator</p>
@@ -97,22 +83,6 @@ export function Sidebar({
                     : "hover:bg-gray-100 text-gray-700"
                 }`}
               >
-                <span className="flex-none">
-                  <svg
-                    className="w-5 h-5 text-gray-500"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    aria-hidden
-                  >
-                    <circle
-                      cx="12"
-                      cy="12"
-                      r="3"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                    />
-                  </svg>
-                </span>
                 <div className="flex flex-col text-sm text-left">
                   <span className="font-medium">{it.label}</span>
                   {it.desc && (
@@ -150,22 +120,7 @@ export function Sidebar({
                 aria-label="Close menu"
                 onClick={() => setOpen(false)}
                 className="h-10 w-10 rounded-md bg-white/80 border flex items-center justify-center"
-              >
-                <svg
-                  className="w-4 h-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  aria-hidden
-                >
-                  <path
-                    d="M6 6l12 12M6 18L18 6"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
+              ></button>
             </div>
 
             <nav className="p-4 space-y-2">
@@ -183,22 +138,6 @@ export function Sidebar({
                         : "hover:bg-gray-100 text-gray-700"
                     }`}
                   >
-                    <span className="flex-none">
-                      <svg
-                        className="w-5 h-5 text-gray-500"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        aria-hidden
-                      >
-                        <circle
-                          cx="12"
-                          cy="12"
-                          r="3"
-                          stroke="currentColor"
-                          strokeWidth="1.2"
-                        />
-                      </svg>
-                    </span>
                     <div className="flex flex-col text-sm">
                       <span className="font-medium">{it.label}</span>
                       {it.desc && (
