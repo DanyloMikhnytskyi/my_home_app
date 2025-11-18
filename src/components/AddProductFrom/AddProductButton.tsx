@@ -8,7 +8,7 @@ export function AddProductButton() {
   } = useFormContext<ProductFormValues>();
 
   return (
-    <Button type="submit" disabled={isSubmitting || isDirty}>
+    <Button type="submit" disabled={isSubmitting || !isDirty}>
       Add Product
     </Button>
   );
