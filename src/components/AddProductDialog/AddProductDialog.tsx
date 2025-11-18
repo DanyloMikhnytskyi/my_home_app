@@ -1,12 +1,6 @@
-import { useEffect } from "react";
-import { useForm, type Resolver, type SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  productFormSchema,
-  type ProductFormValues,
-} from "@/components/AddProductFrom/AddProductFrom.schema";
+import { type SubmitHandler } from "react-hook-form";
+import { type ProductFormValues } from "@/components/AddProductFrom/AddProductFrom.schema";
 import type { Product } from "@/data/productsMock";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,14 +9,15 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-
 import {
   AppProductFrom,
   AddProductTitle,
   AddProductDescription,
   AddProductImage,
   AddProductNumber,
+  AddProductButton,
 } from "@/components/AddProductFrom";
+
 interface AddProductDialogProps {
   isDialogOpen: boolean;
   setIsDialogOpen: (open: boolean) => void;
@@ -34,31 +29,6 @@ export const AddProductDialog = ({
   setIsDialogOpen,
   onAddProduct,
 }: AddProductDialogProps) => {
-  const resolver = zodResolver(
-    productFormSchema
-  ) as Resolver<ProductFormValues>;
-
-  const {
-    reset,
-    formState: { isSubmitting, isDirty },
-  } = useForm<ProductFormValues>({
-    resolver,
-    defaultValues: {
-      title: "",
-      description: "",
-      image: "",
-      calories: 0,
-      carbs: 0,
-      protein: 0,
-      fat: 0,
-      fiber: 0,
-    },
-  });
-
-  useEffect(() => {
-    if (!isDialogOpen) reset();
-  }, [isDialogOpen, reset]);
-
   const onSubmit: SubmitHandler<ProductFormValues> = (values) => {
     const newProduct: Product = {
       id: new Date().getTime(),
@@ -78,7 +48,6 @@ export const AddProductDialog = ({
 
     onAddProduct(newProduct);
     setIsDialogOpen(false);
-    reset();
   };
 
   return (
@@ -88,7 +57,7 @@ export const AddProductDialog = ({
           <DialogTitle>Add New Product</DialogTitle>
         </DialogHeader>
 
-        <AppProductFrom key={String(isDialogOpen)} onSubmit={onSubmit}>
+        <AppProductFrom onSubmit={onSubmit}>
           <AddProductTitle />
           <AddProductDescription />
           <AddProductImage />
@@ -102,12 +71,12 @@ export const AddProductDialog = ({
                 { name: "fat", label: "Fat (g)", placeholder: "15" },
                 { name: "fiber", label: "Fiber (g)", placeholder: "7" },
               ] as const
-            ).map((f) => (
+            ).map(({ name, label, placeholder }) => (
               <AddProductNumber
-                key={f.name}
-                name={f.name}
-                label={f.label}
-                placeholder={f.placeholder}
+                key={name}
+                name={name}
+                label={label}
+                placeholder={placeholder}
               />
             ))}
           </div>
@@ -120,9 +89,7 @@ export const AddProductDialog = ({
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting || isDirty}>
-              Add Product
-            </Button>
+            <AddProductButton />
           </DialogFooter>
         </AppProductFrom>
       </DialogContent>
