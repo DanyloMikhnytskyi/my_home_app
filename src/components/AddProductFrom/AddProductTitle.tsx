@@ -13,11 +13,7 @@ export function AddProductTitle() {
   return (
     <div>
       <Label htmlFor="title">Title *</Label>
-      <Input
-        id="title"
-        {...(register ? register("title") : {})}
-        placeholder="Product name"
-      />
+      <Input id="title" {...register("title")} placeholder="Product name" />
       {errors?.title && (
         <TypographyP className="text-sm text-red-600 mt-1">
           {errors.title.message}
