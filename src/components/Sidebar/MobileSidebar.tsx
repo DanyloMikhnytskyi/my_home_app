@@ -1,6 +1,6 @@
 import type { SidebarItem } from "./types";
 import { SidebarHeader } from "./SidebarHeader";
-import { SidebarNav } from "./SideBarNav";
+import { SidebarNav } from "./SidebarNav";
 
 interface MobileSidebarProps {
   items: SidebarItem[];
