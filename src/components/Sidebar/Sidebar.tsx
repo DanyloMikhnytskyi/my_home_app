@@ -1,35 +1,18 @@
 import { useState } from "react";
-
-type View = "products" | "calculator";
+import { Link, useRouterState } from "@tanstack/react-router";
 
 interface SidebarProps {
-  currentView: View;
-  onChangeView: (view: View) => void;
-  onOpenProductItem?: () => void;
   className?: string;
 }
-export function Sidebar({
-  currentView,
-  onChangeView,
-  onOpenProductItem,
-  className,
-}: SidebarProps) {
+
+export function Sidebar({ className }: SidebarProps) {
   const [open, setOpen] = useState(false);
+  const routerState = useRouterState();
 
-  const items: { key: View; label: string; desc?: string }[] = [
-    { key: "products", label: "Products", desc: "Manage products" },
-    { key: "calculator", label: "Kbju calculator", desc: "Calculator" },
+  const items = [
+    { to: "/", label: "Products", desc: "Manage products" },
+    { to: "/calculator", label: "Kbju calculator", desc: "Calculator" },
   ];
-
-  function handleSelect(key: View) {
-    onChangeView(key);
-    setOpen(false);
-  }
-
-  function handleHeaderClick() {
-    onOpenProductItem?.();
-    setOpen(false);
-  }
 
   return (
     <>
@@ -51,17 +34,15 @@ export function Sidebar({
       >
         <div className="flex items-center px-3 py-3 border-b">
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={handleHeaderClick}
-              onTouchStart={handleHeaderClick}
-              className="flex items-center gap-3 p-1 rounded focus:outline-none"
+            <Link
+              to="/"
+              className="flex items-center gap-3 p-1 rounded focus:outline-none hover:opacity-80"
             >
               <div className="text-left">
                 <h3 className="text-lg font-semibold">Kbju app</h3>
                 <p className="text-xs text-gray-500">products · calculator</p>
               </div>
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -70,12 +51,11 @@ export function Sidebar({
           aria-label="Primary"
         >
           {items.map((it) => {
-            const active = it.key === currentView;
+            const active = routerState.location.pathname === it.to;
             return (
-              <button
-                key={it.key}
-                onClick={() => handleSelect(it.key)}
-                onTouchStart={() => handleSelect(it.key)}
+              <Link
+                key={it.to}
+                to={it.to}
                 aria-current={active ? "page" : undefined}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-md transition ${
                   active
@@ -89,7 +69,7 @@ export function Sidebar({
                     <span className="text-xs text-gray-400">{it.desc}</span>
                   )}
                 </div>
-              </button>
+              </Link>
             );
           })}
         </nav>
@@ -104,33 +84,29 @@ export function Sidebar({
           />
           <div className="relative w-72 max-w-full bg-white h-full shadow-xl">
             <div className="flex items-center justify-between px-4 py-3 border-b">
-              <button
-                type="button"
-                onClick={() => {
-                  handleHeaderClick();
-                }}
-                className="text-left"
-              >
+              <div className="text-left">
                 <h3 className="text-lg font-semibold">Kbju app</h3>
                 <p className="text-xs text-gray-500">products · calculator</p>
-              </button>
+              </div>
 
               <button
                 type="button"
                 aria-label="Close menu"
                 onClick={() => setOpen(false)}
                 className="h-10 w-10 rounded-md bg-white/80 border flex items-center justify-center"
-              ></button>
+              >
+                ✕
+              </button>
             </div>
 
             <nav className="p-4 space-y-2">
               {items.map((it) => {
-                const active = it.key === currentView;
+                const active = routerState.location.pathname === it.to;
                 return (
-                  <button
-                    key={it.key}
-                    onClick={() => handleSelect(it.key)}
-                    onTouchStart={() => handleSelect(it.key)}
+                  <Link
+                    key={it.to}
+                    to={it.to}
+                    onClick={() => setOpen(false)}
                     aria-current={active ? "page" : undefined}
                     className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-3 transition ${
                       active
@@ -144,7 +120,7 @@ export function Sidebar({
                         <span className="text-xs text-gray-400">{it.desc}</span>
                       )}
                     </div>
-                  </button>
+                  </Link>
                 );
               })}
             </nav>
