@@ -1,4 +1,4 @@
-import type { SidebarItem } from "./types";
+import type { SidebarItem } from "./SidebarNav.types";
 import { SidebarHeader } from "./SidebarHeader";
 import { SidebarNav } from "./SidebarNav";
 

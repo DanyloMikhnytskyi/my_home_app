@@ -7,12 +7,18 @@ import {
 } from "@tanstack/react-router";
 import { Products } from "@/components/Products";
 import { Planner } from "@/components/Planner";
-import { Sidebar } from "@/components/Sidebar";
+
+import { DesktopSidebar } from "../Sidebar/DesktopSidebar";
 
 function RootLayout() {
   return (
     <div className="flex h-screen">
-      <Sidebar />
+      <DesktopSidebar
+        items={[
+          { to: "/", label: "Products", desc: "Manage products" },
+          { to: "/calculator", label: "Kbju calculator", desc: "Calculator" },
+        ]}
+      />
       <main className="flex-1 overflow-auto">
         <Outlet />
       </main>

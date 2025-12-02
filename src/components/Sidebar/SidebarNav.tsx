@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import type { SidebarItem } from "./types";
+import type { SidebarItem } from "./SidebarNav.types";
 
 interface SidebarNavProps {
   items: SidebarItem[];
