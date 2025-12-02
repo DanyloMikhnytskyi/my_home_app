@@ -5,7 +5,7 @@ import type { Product } from "@/data/productsMock";
 import { useCart } from "@/hooks/useCart";
 import { Totals } from "@/components/Totals";
 
-export function ProductsList() {
+export function Planner() {
   const products: Product[] = productsMock;
   const { counts, addProduct, removeProduct } = useCart();
 
